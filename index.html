@@ -14,6 +14,7 @@
     overflow: hidden;
     font-family: 'Great Vibes', cursive;
     color: white;
+    position: relative; /* create stable stacking context */
   }
 
   /* INTRO SCREEN */
@@ -25,7 +26,7 @@
     align-items: center;
     justify-content: center;
     background: #2c003e;
-    z-index: 10;
+    z-index: 5;
   }
 
   #introScreen h1 {
@@ -63,7 +64,7 @@
     position: relative;
   }
 
-  /* BACKGROUND + EFFECTS */
+  /* BACKGROUND */
   .background {
     position: fixed;
     inset: 0;
@@ -71,8 +72,8 @@
     filter: blur(2px);
     transform: scale(1.1);
     opacity: 0;
-    transition: opacity 2s;
-    z-index: -3;
+    transition: opacity 2s ease;
+    z-index: 1;
   }
 
   .overlay {
@@ -80,15 +81,16 @@
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
     opacity: 0;
-    transition: opacity 2s;
-    z-index: -2;
+    transition: opacity 2s ease;
+    z-index: 2;
   }
 
   .hearts {
     position: fixed;
     inset: 0;
     overflow: hidden;
-    z-index: -1;
+    z-index: 3;
+    pointer-events: none;
   }
 
   .heart {
@@ -133,7 +135,8 @@
     margin: auto;
     text-shadow: 0 0 25px #ff69b4;
     opacity: 0;
-    transition: opacity 2s;
+    transition: opacity 2s ease;
+    z-index: 4;
   }
 
   .line {
@@ -146,7 +149,6 @@
 
 <body>
 
-<!-- INTRO -->
 <div id="introScreen">
   <h1>Are you ready my Valentine? 💕</h1>
   <div class="buttons">
@@ -155,12 +157,10 @@
   </div>
 </div>
 
-<!-- BACKGROUND + EFFECTS -->
 <div class="background" id="bg"></div>
 <div class="overlay" id="overlay"></div>
 <div class="hearts" id="hearts"></div>
 
-<!-- MESSAGE -->
 <div class="message" id="message">
   <div class="line">Hailey, you're not just my girlfriend</div>
   <div class="line">You're the woman I want to spend the rest of my life with.</div>
@@ -184,7 +184,7 @@
   const music = document.getElementById("music");
 
   /* Dodging No Button */
-  noBtn.addEventListener("mouseover", (e) => {
+  noBtn.addEventListener("mouseover", () => {
     const x = Math.random() * 200 - 100;
     const y = Math.random() * 200 - 100;
     noBtn.style.transform = `translate(${x}px, ${y}px)`;
