@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forever ❤️</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap">
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Great Vibes', cursive;
+    color: white;
+  }
+
+  /* INTRO SCREEN */
+  #introScreen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #2c003e;
+    z-index: 10;
+  }
+
+  #introScreen h1 {
+    font-size: 3.2em;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 40px;
+  }
+
+  button {
+    padding: 18px 35px;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  #yesBtn {
+    background: #ff69b4;
+    color: white;
+  }
+
+  #yesBtn:hover {
+    transform: scale(1.1);
+  }
+
+  #noBtn {
+    background: #ccc;
+    color: black;
+    position: relative;
+  }
+
+  /* BACKGROUND + EFFECTS */
+  .background {
+    position: fixed;
+    inset: 0;
+    background: url("IMG-20260201-WA0006.jpg") center/cover no-repeat;
+    filter: blur(2px);
+    transform: scale(1.1);
+    opacity: 0;
+    transition: opacity 2s;
+    z-index: -3;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transition: opacity 2s;
+    z-index: -2;
+  }
+
+  .hearts {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+  .heart {
+    position: absolute;
+    bottom: -50px;
+    width: 20px;
+    height: 20px;
+    background: pink;
+    transform: rotate(45deg);
+    animation: floatUp linear infinite;
+  }
+
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: pink;
+    border-radius: 50%;
+  }
+
+  .heart::before { top: -10px; left: 0; }
+  .heart::after { left: -10px; top: 0; }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+    100% { transform: translateY(-110vh) rotate(45deg); opacity: 0; }
+  }
+
+  /* MESSAGE */
+  .message {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 3em;
+    text-align: center;
+    max-width: 85%;
+    margin: auto;
+    text-shadow: 0 0 25px #ff69b4;
+    opacity: 0;
+    transition: opacity 2s;
+  }
+
+  .line {
+    opacity: 0;
+    margin: 10px 0;
+  }
+
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="introScreen">
+  <h1>Are you ready my Valentine? 💕</h1>
+  <div class="buttons">
+    <button id="yesBtn">Yes ❤️</button>
+    <button id="noBtn">No 😔</button>
+  </div>
+</div>
+
+<!-- BACKGROUND + EFFECTS -->
+<div class="background" id="bg"></div>
+<div class="overlay" id="overlay"></div>
+<div class="hearts" id="hearts"></div>
+
+<!-- MESSAGE -->
+<div class="message" id="message">
+  <div class="line">Hailey, you're not just my girlfriend</div>
+  <div class="line">You're the woman I want to spend the rest of my life with.</div>
+  <div class="line">You're the woman I want to marry.</div>
+  <div class="line">You've seen my heart like no one else ever has.</div>
+  <div class="line">Endless love, always.</div>
+  <div class="line">T 💕</div>
+</div>
+
+<audio id="music" loop>
+  <source src="diana-ross-lionel-richie-endless-love-1981-128k_7WECFtZ8.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const intro = document.getElementById("introScreen");
+  const bg = document.getElementById("bg");
+  const overlay = document.getElementById("overlay");
+  const message = document.getElementById("message");
+  const music = document.getElementById("music");
+
+  /* Dodging No Button */
+  noBtn.addEventListener("mouseover", (e) => {
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  });
+
+  /* On YES click */
+  yesBtn.addEventListener("click", () => {
+    intro.style.display = "none";
+
+    bg.style.opacity = 1;
+    overlay.style.opacity = 1;
+    message.style.opacity = 1;
+
+    music.play();
+
+    startHearts();
+    revealLines();
+  });
+
+  /* Floating Hearts */
+  const heartsContainer = document.getElementById("hearts");
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = 6 + Math.random() * 6 + "s";
+    heart.style.opacity = Math.random();
+    heart.style.transform = `scale(${0.6 + Math.random()}) rotate(45deg)`;
+    heartsContainer.appendChild(heart);
+
+    setTimeout(() => { heart.remove(); }, 12000);
+  }
+
+  function startHearts() {
+    setInterval(createHeart, 500);
+  }
+
+  /* Typewriter Effect */
+  function revealLines() {
+    const lines = document.querySelectorAll(".line");
+    let delay = 0;
+
+    lines.forEach((line) => {
+      setTimeout(() => {
+        line.style.transition = "opacity 2s ease";
+        line.style.opacity = 1;
+      }, delay);
+      delay += 2000;
+    });
+  }
+</script>
+
+</body>
+</html>
